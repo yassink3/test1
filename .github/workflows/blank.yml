@@ -10,15 +10,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    # Checkout le code de votre dépôt
+    # Checkout du code source du dépôt
     - name: Checkout code
       uses: actions/checkout@v2
 
-    # Installer Docker sur la machine runner si nécessaire
+    # Configurer Docker Buildx pour une meilleure gestion des builds
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v2
 
-    # Mise en cache des couches Docker pour optimiser les builds
+    # Mettre en cache les couches Docker pour améliorer la vitesse des builds
     - name: Cache Docker layers
       uses: actions/cache@v2
       with:
@@ -27,7 +27,7 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-buildx-
 
-    # Connexion à Docker Hub avec les secrets GitHub
+    # Se connecter à Docker Hub
     - name: Login to Docker Hub
       uses: docker/login-action@v2
       with:
@@ -37,10 +37,10 @@ jobs:
     # Construire l'image Docker
     - name: Build Docker image
       run: |
-        cd /home/ubunto/Téléchargements/flask-app-swarm-main  # Naviguer vers votre répertoire de travail
+        # Le répertoire du dépôt cloné est déjà le répertoire de travail
         docker build -t ${{ secrets.DOCKER_USERNAME }}/flask-app:latest .
 
-    # Pousser l'image Docker dans Docker Hub
+    # Pousser l'image Docker vers Docker Hub
     - name: Push Docker image
       run: |
         docker push ${{ secrets.DOCKER_USERNAME }}/flask-app:latest
